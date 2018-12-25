@@ -12,18 +12,43 @@
 
 #include "../includes/test.h"
 
-void				ft_putpixel(t_sdl *sdl, int x, int y, unsigned int pixel)
+unsigned int		ft_getpixel(SDL_Surface *sur, int x, int y)
 {
+	int				bpp;
 	unsigned char	*p;
 
-	p = (unsigned char *)sdl->sur->pixels + y * sdl->sur->pitch + x * sdl->bpp;
-	if (sdl->bpp == 4)
+	bpp = sur->format->BytesPerPixel;
+	p = (unsigned char *)sur->pixels + y * sur->pitch + x * bpp;
+	if (bpp == 4)
+		return (*(unsigned int *)p);
+	else if (bpp == 1)
+		return (*p);
+	else if (bpp == 2)
+		return (*(unsigned short int *)p);
+	else if (bpp == 3) 
+	{
+		if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+			return (p[0] << 16 | p[1] << 8 | p[2]);
+		else
+			return (p[0] | p[1] << 8 | p[2] << 16);
+	}
+	return (0);
+}
+
+void				ft_putpixel(SDL_Surface *sur, int x, int y, unsigned int pixel)
+{
+	int				bpp;
+	unsigned char	*p;
+
+	bpp = sur->format->BytesPerPixel;
+	p = (unsigned char *)sur->pixels + y * sur->pitch + x * bpp;
+	if (bpp == 4)
 		*(unsigned int *)p = pixel;
-	else if (sdl->bpp == 1)
+	else if (bpp == 1)
 		*p = pixel;
-	else if (sdl->bpp == 2)
+	else if (bpp == 2)
 		*(unsigned short int *)p = pixel;
-	else if (sdl->bpp == 3)
+	else if (bpp == 3)
 	{
 		if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
 		{

@@ -10,32 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+// gcc -Wall -Wextra -Werror main.c ft_draw.c ft_draw_prep.c ft_events.c ft_pixel.c ../libft/libft.a -F ../frameworks -I ../frameworks/SDL2_image.framework/Versions/A/Headers -rpath ../frameworks -framework SDL2 -framework SDL2_image
 
 #include "../includes/test.h"
 
 void		ft_textures(t_sdl *sdl)
 {
-	int		h;
-	int		i;
-	int		w;
-
-	h = 64;
-	w = 64;
-	sdl->tex[0] = mlx_xpm_file_to_image(sdl->mlx, "../pics/eagle.xpm", &w, &h);
-	sdl->tex[1] = mlx_xpm_file_to_image(sdl->mlx, "../pics/redbrick.xpm", &w, &h);
-	sdl->tex[2] = mlx_xpm_file_to_image(sdl->mlx, "../pics/purplestone.xpm", &w, &h);
-	sdl->tex[3] = mlx_xpm_file_to_image(sdl->mlx, "../pics/greystone.xpm", &w, &h);
-	sdl->tex[4] = mlx_xpm_file_to_image(sdl->mlx, "../pics/bluestone.xpm", &w, &h);
-	sdl->tex[5] = mlx_xpm_file_to_image(sdl->mlx, "../pics/mossy.xpm", &w, &h);
-	sdl->tex[6] = mlx_xpm_file_to_image(sdl->mlx, "../pics/wood.xpm", &w, &h);
-	sdl->tex[7] = mlx_xpm_file_to_image(sdl->mlx, "../pics/colorstone.xpm", &w, &h);
-	i = -1;
-	while (++i < 8)
-		if (sdl->tex[i])
-			sdl->ttr[i] = (int *)mlx_get_data_addr(sdl->tex[i], &sdl->bpp2, &sdl->sln,
-				&sdl->end);
-	//	else
-	//		return (ft_retval("Textures MIA! Shutting down..\n", -1));
+	sdl->ttr[0] = IMG_Load("../pics/eagle.png");
+	sdl->ttr[1] = IMG_Load("../pics/redbrick.png");
+	sdl->ttr[2] = IMG_Load("../pics/purplestone.png");
+	sdl->ttr[3] = IMG_Load("../pics/greystone.png");
+	sdl->ttr[4] = IMG_Load("../pics/bluestone.png");
+	sdl->ttr[5] = IMG_Load("../pics/mossy.png");
+	sdl->ttr[6] = IMG_Load("../pics/wood.png");
+	sdl->ttr[7] = IMG_Load("../pics/colorstone.png");
+	if (!sdl->ttr[0])
+		write(1, "RIP\n", 1);
 	return ;
 }
 
@@ -98,18 +88,14 @@ void		ft_loadmap(int fd, t_sdl *sdl)
 
 void		ft_loadall(t_sdl *sdl)
 {
-	sdl->mlx = mlx_init();
 	ft_loadmap(open(sdl->map, O_RDONLY), sdl);
 	ft_textures(sdl);
 	SDL_Init(SDL_INIT_VIDEO);
+	IMG_Init(IMG_INIT_PNG);
 	sdl->win = SDL_CreateWindow(N, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, W, H, SDL_WINDOW_SHOWN);
 	SDL_SetHintWithPriority(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1", SDL_HINT_OVERRIDE);
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	sdl->sur = SDL_GetWindowSurface(sdl->win);
-	sdl->bpp = sdl->sur->format->BytesPerPixel;
-	sdl->end = 0;
-	sdl->bpp2 = sizeof(int);
-	sdl->sln = sdl->bpp * W;
 	sdl->run = 1;
 	sdl->dir[0] = BDX;
 	sdl->dir[1] = BDY;
@@ -136,5 +122,6 @@ int			main(int argc, char *argv[argc])
 	}
 	SDL_DestroyWindow(sdl.win);
 	SDL_Quit();
+	IMG_Quit();
 	return (0);
 }

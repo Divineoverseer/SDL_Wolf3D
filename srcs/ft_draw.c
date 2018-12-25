@@ -29,8 +29,8 @@ void		ft_put_floor(t_site *cd)
 		curfloor[1] = weight * cd->fw[1] + (1.0 - weight) * cd->sdl->pos[1];
 		floortex[0] = (int)(curfloor[0] * 64) % 64;
 		floortex[1] = (int)(curfloor[1] * 64) % 64;
-		ft_putpixel(cd->sdl, cd->x, (y - 1), ((cd->sdl->ttr[3][64 * floortex[1] + floortex[0]] >> 1) & 8355711));
-		ft_putpixel(cd->sdl, cd->x, (H - y), cd->sdl->ttr[6][64 * floortex[1] + floortex[0]]);
+		ft_putpixel(cd->sdl->sur, cd->x, (y - 1), ((ft_getpixel(cd->sdl->ttr[3], floortex[0], floortex[1]) >> 1) & 8355711));
+		ft_putpixel(cd->sdl->sur, cd->x, (H - y), ft_getpixel(cd->sdl->ttr[6], floortex[0], floortex[1]));
 	}
 	return ;
 }
@@ -83,10 +83,10 @@ void		ft_wall_texture(t_site *cd)
 	{
 		d = cd->y * 256 - H * 128 + cd->lh * 128;
 		tex[1] = ((d * TH) / cd->lh) / 256;
-		cd->col = cd->sdl->ttr[texnum][(tex[1] * TW) + tex[0]];
+		cd->col = ft_getpixel(cd->sdl->ttr[texnum], tex[0], tex[1]);
 		if ((cd->side2 % 2) == 0)
 			cd->col = (cd->col >> 1) & 8355711;
-		ft_putpixel(cd->sdl, cd->x, cd->y, cd->col);
+		ft_putpixel(cd->sdl->sur, cd->x, cd->y, cd->col);
 	}
 	return ;
 }

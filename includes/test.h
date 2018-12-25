@@ -17,6 +17,7 @@
 # include <math.h>
 # include <mlx.h>
 # include <SDL2/SDL.h>
+# include <SDL_image.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <time.h>
@@ -45,8 +46,6 @@ typedef	struct	s_sdl
 	double		pos[2];
 	double		sn[2];
 	char		*map;
-	int			bpp;
-	int			bpp2;
 	int			end;
 	int			keys[300];
 	int			rel[2];
@@ -55,14 +54,13 @@ typedef	struct	s_sdl
 	int			x;
 	int			xbuff;
 	int			wm[MH][MW];
-	int			*ttr[8];
 	time_t		oldt;
 	time_t		newt;
 	SDL_Event	ev;
 	SDL_Surface	*sur;
+	SDL_Surface	*ttr[8];
 	SDL_Window	*win;
 	void		*mlx;
-	void		*tex[8];
 }				t_sdl;
 
 typedef struct	s_site
@@ -91,8 +89,9 @@ typedef struct	s_site
 int				ft_draw_prep(t_sdl *sdl);
 int				ft_getev(t_sdl *sdl);
 int				ft_event(t_sdl *sdl);
+unsigned int	ft_getpixel(SDL_Surface *sur, int x, int y);
 void			ft_floor_texture(t_site *cd);
 void			ft_wall_texture(t_site *cd);
-void			ft_putpixel(t_sdl *sdl, int x, int y, unsigned int pixel);
+void			ft_putpixel(SDL_Surface *sur, int x, int y, unsigned int pixel);
 
 #endif

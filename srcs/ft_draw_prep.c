@@ -96,8 +96,7 @@ int				ft_draw_prep(t_sdl *sdl)
 	ft_screen_site(&cd);
 	sdl->oldt = sdl->newt;
 	sdl->newt = clock();
-	sdl->ftime = (double)(sdl->newt - sdl->oldt)
-	/ CLOCKS_PER_SEC;
+	sdl->ftime = (double)(sdl->newt - sdl->oldt) / CLOCKS_PER_SEC;
 	(sdl->keys[32] == 1 && sdl->keys[97] == 0 && sdl->keys[115] == 0 &&
 		sdl->keys[100] == 0) ? (sdl->movs = sdl->ftime * 7.0) :
 	((sdl->keys[97] == 1 && (sdl->keys[115] == 1 || sdl->keys[119] == 1)) ||
